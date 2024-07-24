@@ -26,13 +26,13 @@ async function main() {
         const response = await anthropic.messages.create({
             max_tokens: 1024,
             system: `You are a content moderator for a Discord server. The server rules are: ${rules}`,
-            messages: [{ role: 'user', content: `Does this message violate the server rules? Respond with only 'yes' or 'no': "${message.content}"` }],
-            model: 'claude-3-haiku-20240307',
+            messages: [{ role: 'user', content: `Does this message violate the server rules? Respond with only 'yes' or 'no', followed by a one-sentence reasoning: "${message.content}"` }],
+            model: 'claude-3-5-sonnet-20240620',
         });
 
-        const isBannable = response.content[0].text.trim().toLowerCase() === 'yes';
+        const isBannable = response.content[0].text.trim().substring(0, 3).toLowerCase() === 'yes';
         if (isBannable) {
-            await logsChannel.send(`${message.author} at <#${message.channel.id}>: ${message.content}`);
+            await logsChannel.send(`${message.author} at <#${message.channel.id}>\nMessage: ${message.content}\nReason: ${response.content[0].text.trim()}`);
             await message.delete();
         }
     });
