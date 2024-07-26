@@ -20,10 +20,6 @@ module.exports = {
     expect: true,
     localStorage: true
   },
-  ignores: [
-    "node_modules",
-    ".env"
-  ],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
