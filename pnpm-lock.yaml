@@ -17,6 +17,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
 
 packages:
 
@@ -162,6 +165,11 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
+
+  prettier@3.3.3:
+    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
@@ -373,6 +381,8 @@ snapshots:
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
+
+  prettier@3.3.3: {}
 
   tr46@0.0.3: {}
 
