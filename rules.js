@@ -6,5 +6,5 @@ module.exports = {
 - No posts seeking employment
 - No excessive profanity
 - Chain, data feed, dApp integration requests are allowed
-`,
+`
 };
