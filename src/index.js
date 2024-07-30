@@ -31,6 +31,7 @@ async function main() {
     const memberRoles = member.roles.cache.map(role => role.name);
     if(memberRoles.includes(config.trustedRoleName)) return;
 
+    // Fetch server rules from the given "rules channel"
     const rules = (await rulesChannel.messages.fetch({ limit: 1 })).first().content;
     console.log(rules);
 
