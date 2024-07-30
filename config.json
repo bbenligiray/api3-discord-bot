@@ -1,8 +1,4 @@
 {
-  "permissions": {
-    "canBan": ["145547094302654464"],
-    "canRedoDeletion": ["145547094302654464"]
-  },
   "emojis": {
     "banEmoji": {
       "name": "face_vomiting",

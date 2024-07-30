@@ -68,7 +68,7 @@ async function main() {
   });
 
   // Do stuff based on the emojis in log channel
-  discord.on('messageReactionAdd', async (reaction, user) => {
+  discord.on('messageReactionAdd', async (reaction) => {
     // Reacted message must be in log channel
     if (reaction.message.channelId !== config.logChannelId) {
       return;
@@ -86,40 +86,35 @@ async function main() {
     switch (reaction.emoji.identifier) {
       // ban user
       case config.emojis.banEmoji.identifier: {
-        if (config.permissions.canBan.includes(user.id)) {
-          const message = reaction.message;
-          const log = JSON.parse(message.content);
-          const originalUserId = log.user.match(/<@(\d+)>/)[1];
-          const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
-          const originalMessage = log.message;
+        const message = reaction.message;
+        const log = JSON.parse(message.content);
+        const originalUserId = log.user.match(/<@(\d+)>/)[1];
+        const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
+        const originalMessage = log.message;
 
-          const messageOwner = reaction.message.guild.members.cache.get(originalUserId);
-          await messageOwner.ban();
-          const banLog = {
-            user: `${log.user}`,
-            message: originalMessage,
-            channel: `<#${originalChannelId}>`
-          };
-          await banAnnouncementsChannel.send(JSON.stringify(banLog));
-        }
-
+        const messageOwner = reaction.message.guild.members.cache.get(originalUserId);
+        await messageOwner.ban();
+        const banLog = {
+          user: `${log.user}`,
+          message: originalMessage,
+          channel: `<#${originalChannelId}>`
+        };
+        await banAnnouncementsChannel.send(JSON.stringify(banLog));
         break;
       }
       // repost accidentally deleted message
       case config.emojis.redoDeletionEmoji.identifier: {
-        if (config.permissions.canRedoDeletion.includes(user.id)) {
-          const message = reaction.message;
+        const message = reaction.message;
 
-          const log = JSON.parse(message.content);
-          const originalUser = log.user;
-          const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
-          const originalMessage = log.message;
+        const log = JSON.parse(message.content);
+        const originalUser = log.user;
+        const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
+        const originalMessage = log.message;
 
-          const targetChannel = await discord.channels.fetch(originalChannelId);
-          targetChannel.send(
-            `[REPOST] - This message from ${originalUser} was deleted accidentally:\n${originalMessage}`
-          );
-        }
+        const targetChannel = await discord.channels.fetch(originalChannelId);
+        targetChannel.send(
+          `[REPOST] - This message from ${originalUser} was deleted accidentally:\n${originalMessage}`
+        );
         break;
       }
     }
