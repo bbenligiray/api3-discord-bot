@@ -28,8 +28,8 @@ async function main() {
 
     // Don't check messages from people with a certain "trusted" role
     const member = await message.guild.members.fetch(message.author.id);
-    const memberRoles = member.roles.cache.map(role => role.name);
-    if(memberRoles.includes(config.trustedRoleName)) return;
+    const memberRoles = member.roles.cache.map((role) => role.name);
+    if (memberRoles.includes(config.trustedRoleName)) return;
 
     // Fetch server rules from the given "rules channel"
     const rules = (await rulesChannel.messages.fetch({ limit: 1 })).first().content;
