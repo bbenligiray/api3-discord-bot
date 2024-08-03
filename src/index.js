@@ -1,7 +1,7 @@
 const fs = require('fs');
 require('dotenv').config();
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const { handleMessages, handleReactions } = require('./handlers');
+const { handleMessage, handleReaction } = require('./handlers');
 
 async function main() {
   const config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
@@ -25,17 +25,17 @@ async function main() {
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessages(message, config, channels.logs, logsChannel);
+    handleMessage(message, config, channels.rules, channels.logs);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessages(newMessage, config, channels.rules, channels.logs);
+    handleMessage(newMessage, config, channels.rules, channels.logs);
   });
 
   // Do stuff based on the emojis in log channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReactions(reaction, config, channels.banAnnouncements, discord);
+    handleReaction(reaction, config, channels.banAnnouncements, discord);
   });
 }
 

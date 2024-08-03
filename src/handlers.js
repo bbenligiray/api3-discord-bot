@@ -1,6 +1,6 @@
 const { chat } = require('./openrouter');
 
-const handleMessages = async (message, config, rulesChannel, logsChannel) => {
+const handleMessage = async (message, config, rulesChannel, logsChannel) => {
   if (message.author.bot) return;
 
   // Don't check messages from people with a certain "trusted" role
@@ -50,7 +50,7 @@ const handleMessages = async (message, config, rulesChannel, logsChannel) => {
   }
 };
 
-const handleReactions = async (reaction, config, banAnnouncementsChannel, discord) => {
+const handleReaction = async (reaction, config, banAnnouncementsChannel, discord) => {
   // Reacted message must be in log channel
   if (reaction.message.channelId !== config.logChannelId) {
     return;
@@ -101,6 +101,6 @@ const handleReactions = async (reaction, config, banAnnouncementsChannel, discor
 };
 
 module.exports = {
-  handleMessages,
-  handleReactions
+  handleMessage,
+  handleReaction
 };
