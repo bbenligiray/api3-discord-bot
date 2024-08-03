@@ -5,14 +5,8 @@
     "prompt": "1269346901459996754"
   },
   "emojis": {
-    "banEmoji": {
-      "name": "face_vomiting",
-      "identifier": "%F0%9F%A4%AE"
-    },
-    "redoDeletionEmoji": {
-      "name": "deaf_man",
-      "identifier": "%F0%9F%A7%8F%E2%80%8D%E2%99%82%EF%B8%8F"
-    }
+    "ban": "🤮",
+    "redo": "🧏‍♂️"
   },
   "roleIds": {
     "api3-bot-immune": "1269347559717998685"

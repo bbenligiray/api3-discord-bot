@@ -23,6 +23,11 @@ async function main() {
     prompt: await discord.channels.fetch(config.channelIds.prompt)
   };
 
+  const emojis = {
+    ban: config.emojis.ban,
+    redo: config.emojis.redo
+  };
+
   const roleIds = {
     api3BotImmune: config.roleIds['api3-bot-immune']
   };
@@ -39,7 +44,7 @@ async function main() {
 
   // Do stuff based on the emojis in logs channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReaction(reaction, config, channels, discord);
+    handleReaction(reaction, channels, emojis, discord);
   });
 }
 

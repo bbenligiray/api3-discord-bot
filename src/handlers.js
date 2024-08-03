@@ -7,7 +7,6 @@ const handleMessage = async (message, channels, roleIds) => {
   const memberRoleIds = author.roles.cache.map((role) => role.id);
   if (memberRoleIds.includes(roleIds.api3BotImmune)) return;
 
-  // Fetch server rules from the given "rules channel"
   const prompt = (await channels.prompt.messages.fetch({ limit: 1 })).first().content;
   const messages = [
     {
@@ -38,13 +37,12 @@ const handleMessage = async (message, channels, roleIds) => {
       )
     );
     await channels.announcements.send(
-      `${message.author}, I deleted your message at <#${message.channel.id}> because \`${reason}\`. Our moderators will review this.`
+      `${message.author}, I deleted your message at <#${message.channel.id}> because \`${reason}\` Our moderators will review this.`
     );
   }
 };
 
-const handleReaction = async (reaction, config, channels, discord) => {
-  // Reacted message must be in logs channel
+const handleReaction = async (reaction, channels, emojis, discord) => {
   if (reaction.message.channelId !== channels.logs.id) {
     return;
   }
@@ -58,36 +56,29 @@ const handleReaction = async (reaction, config, channels, discord) => {
     }
   }
 
-  switch (reaction.emoji.identifier) {
-    // ban user
-    case config.emojis.banEmoji.identifier: {
-      const message = reaction.message;
-      const log = JSON.parse(message.content);
+  // Only api3-bot-maintainers have access to the logs channel
+  // so we know that the user is authorized
+  switch (reaction._emoji.name) {
+    case emojis.ban: {
+      const log = JSON.parse(reaction.message.content);
       const originalUserId = log.user.match(/<@(\d+)>/)[1];
       const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
-      const originalMessage = log.message;
-
-      const messageOwner = reaction.message.guild.members.cache.get(originalUserId);
-      await messageOwner.ban();
-      const banLog = {
-        user: `${log.user}`,
-        message: originalMessage,
-        channel: `<#${originalChannelId}>`
-      };
-      await channels.announcements.send(JSON.stringify(banLog));
+      const originalUser = reaction.message.guild.members.cache.get(originalUserId);
+      await originalUser.ban();
+      await channels.announcements.send(
+        `${originalUser} is banned for their message at <#${originalChannelId}> after a moderator reviewed my report.`
+      );
       break;
     }
-    // repost accidentally deleted message
-    case config.emojis.redoDeletionEmoji.identifier: {
-      const message = reaction.message;
-
-      const log = JSON.parse(message.content);
+    case emojis.redo: {
+      const log = JSON.parse(reaction.message.content);
       const originalUser = log.user;
       const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
       const originalMessage = log.message;
-
       const targetChannel = await discord.channels.fetch(originalChannelId);
-      targetChannel.send(`[REPOST] - This message from ${originalUser} was deleted accidentally:\n${originalMessage}`);
+      await targetChannel.send(
+        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it. Sorry!\n\n ${originalMessage}`
+      );
       break;
     }
   }
