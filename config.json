@@ -1,0 +1,16 @@
+{
+  "emojis": {
+    "banEmoji": {
+      "name": "face_vomiting",
+      "identifier": "%F0%9F%A4%AE"
+    },
+    "redoDeletionEmoji": {
+      "name": "deaf_man",
+      "identifier": "%F0%9F%A7%8F%E2%80%8D%E2%99%82%EF%B8%8F"
+    }
+  },
+  "trustedRoleName": "Trusted",
+  "logChannelId": "1266340702997184634",
+  "banAnnouncementsChannelId": "1266371743317102750",
+  "rulesChannelId": "1266400340928892939"
+}

@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write --log-level silent \"./**/*.{js,ts,md,json,json.example}\"",
+    "eslint:check": "eslint . --ext .js,ts",
+    "eslint:fix": "eslint . --ext .js,.ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +15,11 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
     "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.3.3"
   }
 }
