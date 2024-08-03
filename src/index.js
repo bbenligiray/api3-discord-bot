@@ -29,12 +29,12 @@ async function main() {
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessage(message, channels.prompt, channels.logs, roleIds.api3BotImmune);
+    handleMessage(message, channels, roleIds);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessage(newMessage, channels.prompt, channels.logs, roleIds.api3BotImmune);
+    handleMessage(newMessage, channels, roleIds);
   });
 
   // Do stuff based on the emojis in logs channel

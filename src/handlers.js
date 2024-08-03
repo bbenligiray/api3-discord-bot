@@ -1,32 +1,18 @@
 const { chat } = require('./openrouter');
 
-const handleMessage = async (message, promptChannel, logsChannel, api3BotImmuneRoleId) => {
+const handleMessage = async (message, channels, roleIds) => {
   if (message.author.bot) return;
 
-  // Don't check messages from people with a certain "trusted" role
-  const member = await message.guild.members.fetch(message.author.id);
-  const memberRoleIds = member.roles.cache.map((role) => role.id);
-  if (memberRoleIds.includes(api3BotImmuneRoleId)) return;
+  const author = await message.guild.members.fetch(message.author.id);
+  const memberRoleIds = author.roles.cache.map((role) => role.id);
+  if (memberRoleIds.includes(roleIds.api3BotImmune)) return;
 
   // Fetch server rules from the given "rules channel"
-  const rules = (await promptChannel.messages.fetch({ limit: 1 })).first().content;
-  console.log(rules);
-
-  const chatHistory = [
+  const prompt = (await channels.prompt.messages.fetch({ limit: 1 })).first().content;
+  const messages = [
     {
-      role: 'user',
-      content: `
-        You are a content moderator for a Discord server. The server rules are: 
-        ${rules}
-
-        Return a string in the below format
-      
-        <result>|<reason>
-
-        Where
-        * result: Will be "YES" if the message violates the server rules, otherwise "NO"
-        * reason: Will explain how message violates the server rules
-      `
+      role: 'system',
+      content: prompt
     },
     {
       role: 'user',
@@ -34,19 +20,26 @@ const handleMessage = async (message, promptChannel, logsChannel, api3BotImmuneR
     }
   ];
 
-  const response = await chat('anthropic/claude-3.5-sonnet', chatHistory, process.env.OPENROUTER_API_KEY);
+  const response = await chat('anthropic/claude-3.5-sonnet', messages, process.env.OPENROUTER_API_KEY);
   const [result, reason] = response.split('|');
 
-  const isBannable = result === 'YES';
-  if (isBannable) {
-    const log = {
-      user: `${message.author}`,
-      channel: `<#${message.channel.id}>`,
-      message: message.content,
-      reason: reason
-    };
-    await logsChannel.send(JSON.stringify(log));
+  if (result === 'YES') {
     await message.delete();
+    await channels.logs.send(
+      JSON.stringify(
+        {
+          user: `${message.author}`,
+          channel: `<#${message.channel.id}>`,
+          message: message.content,
+          reason: reason
+        },
+        null,
+        2
+      )
+    );
+    await channels.announcements.send(
+      `${message.author}, I deleted your message at <#${message.channel.id}> because \`${reason}\`. Our moderators will review this.`
+    );
   }
 };
 
