@@ -43,9 +43,9 @@ const handleMessage = async (message, channels, roleIds) => {
   }
 };
 
-const handleReaction = async (reaction, config, announcementsChannel, logsChannel, discord) => {
+const handleReaction = async (reaction, config, channels, discord) => {
   // Reacted message must be in logs channel
-  if (reaction.message.channelId !== logsChannel.id) {
+  if (reaction.message.channelId !== channels.logs.id) {
     return;
   }
 
@@ -74,7 +74,7 @@ const handleReaction = async (reaction, config, announcementsChannel, logsChanne
         message: originalMessage,
         channel: `<#${originalChannelId}>`
       };
-      await announcementsChannel.send(JSON.stringify(banLog));
+      await channels.announcements.send(JSON.stringify(banLog));
       break;
     }
     // repost accidentally deleted message

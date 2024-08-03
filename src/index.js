@@ -39,7 +39,7 @@ async function main() {
 
   // Do stuff based on the emojis in logs channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReaction(reaction, config, channels.announcements, channels.logs, discord);
+    handleReaction(reaction, config, channels, discord);
   });
 }
 
