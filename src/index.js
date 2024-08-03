@@ -24,7 +24,7 @@ async function main() {
   };
 
   const roleIds = {
-    api3BotImmune: config.roles['api3-bot-immune']
+    api3BotImmune: config.roleIds['api3-bot-immune']
   };
 
   // Control messages on creation
