@@ -34,17 +34,29 @@ async function main() {
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessage(message, channels, roleIds);
+    try {
+      await handleMessage(message, channels, roleIds);
+    } catch (error) {
+      console.error(`Failed to handle message creation.\n${error}`);
+    }
   });
 
   // Control messages on edit
-  discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessage(newMessage, channels, roleIds);
+  discord.on('messageUpdate', async (_oldMessage, newMessage) => {
+    try {
+      await handleMessage(newMessage, channels, roleIds);
+    } catch (error) {
+      console.error(`Failed to handle message editing.\n${error}`);
+    }
   });
 
   // Do stuff based on the emojis in logs channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReaction(reaction, channels, emojis, discord);
+    try {
+      await handleReaction(reaction, channels, emojis, discord);
+    } catch (error) {
+      console.error(`Failed to handle message reaction adding.\n${error}`);
+    }
   });
 }
 
