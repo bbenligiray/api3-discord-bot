@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write --log-level silent \"./**/*.{js,ts,md,json,json.example}\"",
-    "eslint:check": "eslint . --ext .js,ts",
-    "eslint:fix": "eslint . --ext .js,.ts --fix"
+    "lint": "pnpm prettier:check && eslint . --ext .js,ts",
+    "prettier": "prettier --write \"./**/*.{js,ts,md,json,json.example}\"",
+    "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,json.example}\""
   },
   "keywords": [],
   "author": "",
