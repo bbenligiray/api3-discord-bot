@@ -1,5 +1,5 @@
-require('dotenv').config();
 const fs = require('fs');
+require('dotenv').config();
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { handleMessages, handleReactions } = require('./handlers');
 
