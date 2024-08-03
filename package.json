@@ -1,16 +1,14 @@
 {
-  "name": "api3-discord-bot",
+  "name": "@api3/discord-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "API3 Discord bot",
+  "license": "UNLICENSED",
   "main": "index.js",
   "scripts": {
     "lint": "pnpm prettier:check && eslint . --ext .js,ts",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,json.example}\"",
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,json.example}\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
     "discord.js": "^14.15.3",

@@ -1,1 +1,1 @@
-# api3-discord-bot
+# @api3/discord-bot
