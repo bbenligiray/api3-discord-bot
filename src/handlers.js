@@ -1,6 +1,6 @@
 const { chat } = require('./openrouter');
 
-const handleMessage = async (message, config, promptChannel, logChannel) => {
+const handleMessage = async (message, config, promptChannel, logsChannel) => {
   if (message.author.bot) return;
 
   // Don't check messages from people with a certain "trusted" role
@@ -45,14 +45,14 @@ const handleMessage = async (message, config, promptChannel, logChannel) => {
       message: message.content,
       reason: reason
     };
-    await logChannel.send(JSON.stringify(log));
+    await logsChannel.send(JSON.stringify(log));
     await message.delete();
   }
 };
 
-const handleReaction = async (reaction, config, announcementsChannel, logChannel, discord) => {
-  // Reacted message must be in log channel
-  if (reaction.message.channelId !== logChannel.id) {
+const handleReaction = async (reaction, config, announcementsChannel, logsChannel, discord) => {
+  // Reacted message must be in logs channel
+  if (reaction.message.channelId !== logsChannel.id) {
     return;
   }
 

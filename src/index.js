@@ -19,23 +19,23 @@ async function main() {
 
   const channels = {
     announcements: await discord.channels.fetch(config.channelIds.announcements),
-    log: await discord.channels.fetch(config.channelIds.log),
+    logs: await discord.channels.fetch(config.channelIds.logs),
     prompt: await discord.channels.fetch(config.channelIds.prompt)
   };
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessage(message, config, channels.prompt, channels.log);
+    handleMessage(message, config, channels.prompt, channels.logs);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessage(newMessage, config, channels.prompt, channels.log);
+    handleMessage(newMessage, config, channels.prompt, channels.logs);
   });
 
-  // Do stuff based on the emojis in log channel
+  // Do stuff based on the emojis in logs channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReaction(reaction, config, channels.announcements, channels.log, discord);
+    handleReaction(reaction, config, channels.announcements, channels.logs, discord);
   });
 }
 
