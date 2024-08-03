@@ -17,27 +17,26 @@ async function main() {
   });
   await discord.login(process.env.DISCORD_TOKEN);
 
-  // fetch required channels
-  const banAnnouncementsChannel = await discord.channels.fetch(config.banAnnouncementsChannelId);
-  const rulesChannel = await discord.channels.fetch(config.rulesChannelId);
-  const logsChannel = await discord.channels.fetch(config.logChannelId);
+  const channels = {
+    banAnnouncements: await discord.channels.fetch(config.banAnnouncementsChannelId),
+    rules: await discord.channels.fetch(config.rulesChannelId),
+    logs: await discord.channels.fetch(config.logChannelId)
+  };
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessages(message, config, rulesChannel, logsChannel);
+    handleMessages(message, config, channels.logs, logsChannel);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessages(newMessage, config, rulesChannel, logsChannel);
+    handleMessages(newMessage, config, channels.rules, channels.logs);
   });
 
   // Do stuff based on the emojis in log channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReactions(reaction, config, banAnnouncementsChannel, discord);
+    handleReactions(reaction, config, channels.banAnnouncements, discord);
   });
-
-  //
 }
 
 main();
