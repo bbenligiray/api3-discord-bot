@@ -1,6 +1,6 @@
 const { chat } = require('./openrouter');
 
-const handleMessage = async (message, config, rulesChannel, logsChannel) => {
+const handleMessage = async (message, config, promptChannel, logChannel) => {
   if (message.author.bot) return;
 
   // Don't check messages from people with a certain "trusted" role
@@ -9,7 +9,7 @@ const handleMessage = async (message, config, rulesChannel, logsChannel) => {
   if (memberRoles.includes(config.trustedRoleName)) return;
 
   // Fetch server rules from the given "rules channel"
-  const rules = (await rulesChannel.messages.fetch({ limit: 1 })).first().content;
+  const rules = (await promptChannel.messages.fetch({ limit: 1 })).first().content;
   console.log(rules);
 
   const chatHistory = [
@@ -45,14 +45,14 @@ const handleMessage = async (message, config, rulesChannel, logsChannel) => {
       message: message.content,
       reason: reason
     };
-    await logsChannel.send(JSON.stringify(log));
+    await logChannel.send(JSON.stringify(log));
     await message.delete();
   }
 };
 
-const handleReaction = async (reaction, config, banAnnouncementsChannel, discord) => {
+const handleReaction = async (reaction, config, announcementsChannel, logChannel, discord) => {
   // Reacted message must be in log channel
-  if (reaction.message.channelId !== config.logChannelId) {
+  if (reaction.message.channelId !== logChannel.id) {
     return;
   }
 
@@ -81,7 +81,7 @@ const handleReaction = async (reaction, config, banAnnouncementsChannel, discord
         message: originalMessage,
         channel: `<#${originalChannelId}>`
       };
-      await banAnnouncementsChannel.send(JSON.stringify(banLog));
+      await announcementsChannel.send(JSON.stringify(banLog));
       break;
     }
     // repost accidentally deleted message

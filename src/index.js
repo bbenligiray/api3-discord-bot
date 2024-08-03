@@ -18,24 +18,24 @@ async function main() {
   await discord.login(process.env.DISCORD_TOKEN);
 
   const channels = {
-    banAnnouncements: await discord.channels.fetch(config.banAnnouncementsChannelId),
-    rules: await discord.channels.fetch(config.rulesChannelId),
-    logs: await discord.channels.fetch(config.logChannelId)
+    announcements: await discord.channels.fetch(config.channelIds.announcements),
+    log: await discord.channels.fetch(config.channelIds.log),
+    prompt: await discord.channels.fetch(config.channelIds.prompt)
   };
 
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessage(message, config, channels.rules, channels.logs);
+    handleMessage(message, config, channels.prompt, channels.log);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessage(newMessage, config, channels.rules, channels.logs);
+    handleMessage(newMessage, config, channels.prompt, channels.log);
   });
 
   // Do stuff based on the emojis in log channel
   discord.on('messageReactionAdd', async (reaction) => {
-    handleReaction(reaction, config, channels.banAnnouncements, discord);
+    handleReaction(reaction, config, channels.announcements, channels.log, discord);
   });
 }
 
