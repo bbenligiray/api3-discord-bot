@@ -1,4 +1,4 @@
-const { chatWithLlm } = require('./chat');
+const { chat } = require('./openrouter');
 
 const handleMessages = async (message, config, rulesChannel, logsChannel) => {
   if (message.author.bot) return;
@@ -34,7 +34,7 @@ const handleMessages = async (message, config, rulesChannel, logsChannel) => {
     }
   ];
 
-  const response = await chatWithLlm(chatHistory, process.env.ANTHROPIC_API_KEY);
+  const response = await chat('anthropic/claude-3.5-sonnet', chatHistory, process.env.OPENROUTER_API_KEY);
   const [result, reason] = response.split('|');
 
   const isBannable = result === 'YES';
