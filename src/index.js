@@ -23,14 +23,18 @@ async function main() {
     prompt: await discord.channels.fetch(config.channelIds.prompt)
   };
 
+  const roleIds = {
+    api3BotImmune: config.roles['api3-bot-immune']
+  };
+
   // Control messages on creation
   discord.on('messageCreate', async (message) => {
-    handleMessage(message, config, channels.prompt, channels.logs);
+    handleMessage(message, channels.prompt, channels.logs, roleIds.api3BotImmune);
   });
 
   // Control messages on edit
   discord.on('messageUpdate', (_oldMessage, newMessage) => {
-    handleMessage(newMessage, config, channels.prompt, channels.logs);
+    handleMessage(newMessage, channels.prompt, channels.logs, roleIds.api3BotImmune);
   });
 
   // Do stuff based on the emojis in logs channel

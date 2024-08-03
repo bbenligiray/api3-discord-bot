@@ -1,12 +1,12 @@
 const { chat } = require('./openrouter');
 
-const handleMessage = async (message, config, promptChannel, logsChannel) => {
+const handleMessage = async (message, promptChannel, logsChannel, api3BotImmuneRoleId) => {
   if (message.author.bot) return;
 
   // Don't check messages from people with a certain "trusted" role
   const member = await message.guild.members.fetch(message.author.id);
-  const memberRoles = member.roles.cache.map((role) => role.name);
-  if (memberRoles.includes(config.trustedRoleName)) return;
+  const memberRoleIds = member.roles.cache.map((role) => role.id);
+  if (memberRoleIds.includes(api3BotImmuneRoleId)) return;
 
   // Fetch server rules from the given "rules channel"
   const rules = (await promptChannel.messages.fetch({ limit: 1 })).first().content;
