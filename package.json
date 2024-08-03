@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "API3 Discord bot",
   "license": "UNLICENSED",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "pnpm prettier:check && eslint . --ext .js,ts",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,json.example}\"",
