@@ -4,6 +4,8 @@ const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { handleMessages, handleReactions } = require('./handlers');
 
 async function main() {
+  const config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
+
   const discord = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -14,8 +16,6 @@ async function main() {
     partials: [Partials.Message, Partials.Channel, Partials.Reaction]
   });
   await discord.login(process.env.DISCORD_TOKEN);
-
-  const config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
 
   // fetch required channels
   const banAnnouncementsChannel = await discord.channels.fetch(config.banAnnouncementsChannelId);
