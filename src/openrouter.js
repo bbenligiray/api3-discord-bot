@@ -1,4 +1,8 @@
-async function chat(model, messages) {
+async function chat(messages) {
+  return chatWithOpenRouter('anthropic/claude-3.5-sonnet', messages);
+}
+
+async function chatWithOpenRouter(model, messages) {
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
