@@ -1,4 +1,4 @@
-const { chat } = require('./openrouter');
+const { chat } = require('./llm');
 
 const handleMessage = async (message, channels, roleIds) => {
   if (message.author.bot) return;
@@ -19,7 +19,7 @@ const handleMessage = async (message, channels, roleIds) => {
     }
   ];
 
-  const response = await chat('anthropic/claude-3.5-sonnet', messages);
+  const response = await chat(messages);
   const [result, reason] = response.split('|');
 
   if (result === 'YES') {
