@@ -19,7 +19,7 @@ const handleMessage = async (message, channels, roleIds) => {
     }
   ];
 
-  const response = await chat('anthropic/claude-3.5-sonnet', messages, process.env.OPENROUTER_API_KEY);
+  const response = await chat('anthropic/claude-3.5-sonnet', messages);
   const [result, reason] = response.split('|');
 
   if (result === 'YES') {
