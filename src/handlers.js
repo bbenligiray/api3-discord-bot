@@ -79,7 +79,7 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
       const originalMessage = log.message;
       const targetChannel = await discord.channels.fetch(originalChannelId);
       await targetChannel.send(
-        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n\n ${originalMessage}`
+        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n ${originalMessage}`
       );
       await originalUser.timeout(null);
       break;
