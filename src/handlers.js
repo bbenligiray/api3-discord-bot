@@ -24,6 +24,8 @@ const handleMessage = async (message, channels, roleIds) => {
 
   if (result === 'YES') {
     await message.delete();
+    const timeoutLengthInHours = 24;
+    await author.timeout(timeoutLengthInHours * 60 * 60 * 1000);
     await channels.logs.send(
       JSON.stringify(
         {
@@ -37,7 +39,7 @@ const handleMessage = async (message, channels, roleIds) => {
       )
     );
     await channels.announcements.send(
-      `${message.author}, I deleted your message at <#${message.channel.id}> because \`${reason}\` Our moderators will review this.`
+      `${message.author}, I deleted your message at <#${message.channel.id}> and put you on timeout for ${timeoutLengthInHours} hours because \`${reason}\` Our moderators will review this.`
     );
   }
 };
@@ -77,8 +79,9 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
       const originalMessage = log.message;
       const targetChannel = await discord.channels.fetch(originalChannelId);
       await targetChannel.send(
-        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it. Sorry!\n\n ${originalMessage}`
+        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n\n ${originalMessage}`
       );
+      await originalUser.timeout(null);
       break;
     }
   }
