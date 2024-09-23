@@ -74,13 +74,14 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
     }
     case emojis.redo: {
       const log = JSON.parse(reaction.message.content);
-      const originalUser = log.user;
       const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
       const originalMessage = log.message;
       const targetChannel = await discord.channels.fetch(originalChannelId);
       await targetChannel.send(
-        `> I deleted the message below by ${originalUser} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n ${originalMessage}`
+        `> I deleted the message below by ${log.user} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n ${originalMessage}`
       );
+      const originalUserId = log.user.match(/<@(\d+)>/)[1];
+      const originalUser = reaction.message.guild.members.cache.get(originalUserId);
       await originalUser.timeout(null);
       break;
     }
