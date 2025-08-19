@@ -1,9 +1,19 @@
 const { chat } = require('./llm');
+const logger = require('./logger');
 
 const handleMessage = async (message, channels, roleIds) => {
   if (message.author.bot) return;
 
-  const author = await message.guild.members.fetch(message.author.id);
+  let author;
+  try {
+    author = await message.guild.members.fetch(message.author.id);
+  } catch (error) {
+    if (error.code === 10007) {
+      logger.warn(`Attempted to process a message from a user who is no longer in the server: ${message.author.id}`);
+      return;
+    }
+    throw error;
+  }
   const memberRoleIds = author.roles.cache.map((role) => role.id);
   if (memberRoleIds.includes(roleIds.api3BotImmune)) return;
 
@@ -53,7 +63,7 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
     try {
       await reaction.fetch();
     } catch (error) {
-      console.error('Something went wrong when fetching the reaction: ', error);
+      logger.error('Something went wrong when fetching the reaction: ', error);
       return;
     }
   }
@@ -65,7 +75,16 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
       const log = JSON.parse(reaction.message.content);
       const originalUserId = log.user.match(/<@(\d+)>/)[1];
       const originalChannelId = log.channel.match(/<#(\d+)>/)[1];
-      const originalUser = reaction.message.guild.members.cache.get(originalUserId);
+      let originalUser;
+      try {
+        originalUser = await reaction.message.guild.members.fetch(originalUserId);
+      } catch (error) {
+        if (error.code === 10007) {
+          logger.warn(`Attempted to ban a user who is no longer in the server: ${originalUserId}`);
+          return;
+        }
+        throw error;
+      }
       await originalUser.ban();
       await channels.announcements.send(
         `${originalUser} is banned for their message at <#${originalChannelId}> after a moderator reviewed my report.`
@@ -81,7 +100,16 @@ const handleReaction = async (reaction, channels, emojis, discord) => {
         `> I deleted the message below by ${log.user} for breaking server rules, but a moderator told me to repost it and take them out of timeout. Sorry!\n ${originalMessage}`
       );
       const originalUserId = log.user.match(/<@(\d+)>/)[1];
-      const originalUser = reaction.message.guild.members.cache.get(originalUserId);
+      let originalUser;
+      try {
+        originalUser = await reaction.message.guild.members.fetch(originalUserId);
+      } catch (error) {
+        if (error.code === 10007) {
+          logger.warn(`Attempted to un-timeout a user who is no longer in the server: ${originalUserId}`);
+          return;
+        }
+        throw error;
+      }
       await originalUser.timeout(null);
       break;
     }

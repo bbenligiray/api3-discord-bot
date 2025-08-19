@@ -2,6 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { handleMessage, handleReaction } = require('./handlers');
+const logger = require('./logger');
 
 async function main() {
   const config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
@@ -37,7 +38,7 @@ async function main() {
     try {
       await handleMessage(message, channels, roleIds);
     } catch (error) {
-      console.error(`Failed to handle message creation.\n${error}`);
+      logger.error(`Failed to handle message creation.\n${error}`);
     }
   });
 
@@ -46,7 +47,7 @@ async function main() {
     try {
       await handleMessage(newMessage, channels, roleIds);
     } catch (error) {
-      console.error(`Failed to handle message editing.\n${error}`);
+      logger.error(`Failed to handle message editing.\n${error}`);
     }
   });
 
@@ -55,7 +56,7 @@ async function main() {
     try {
       await handleReaction(reaction, channels, emojis, discord);
     } catch (error) {
-      console.error(`Failed to handle message reaction adding.\n${error}`);
+      logger.error(`Failed to handle message reaction adding.\n${error}`);
     }
   });
 }
