@@ -6,10 +6,10 @@ const anthropic = new Anthropic({
 
 async function chat(messages) {
   try {
-    return chatWithOpenRouter('anthropic/claude-3.5-sonnet', messages);
+    return chatWithOpenRouter('anthropic/claude-sonnet-4', messages);
   } catch (errorOpenrouter) {
     try {
-      return chatWithAnthropic('claude-3-5-sonnet-20240620', messages);
+      return chatWithAnthropic('claude-sonnet-4-20250514', messages);
     } catch (errorAnthropic) {
       console.error(`Openrouter call failed with ${errorOpenrouter}\nAnthropic call failed with ${errorAnthropic}`);
     }
